@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sequra</groupId>
-	<artifactId>challence</artifactId>
+	<artifactId>challenge</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>challence</name>
+	<name>challenge</name>
 	<description>Coding challenge backend sequra</description>
 	<properties>
 		<java.version>11</java.version>
