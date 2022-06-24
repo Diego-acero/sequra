@@ -1,4 +1,4 @@
-package com.sequra.challence;
+package com.sequra.challenge;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
