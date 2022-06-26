@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS SQ_ORDER (
+
+id               BIGINT          NOT NULL,
+merchantId       BIGINT          NOT NULL,
+shopperId        BIGINT          NOT NULL,
+amount           BIGINT          NOT NULL,
+createdAt        TIMESTAMP       NOT NULL,
+completedAt      TIMESTAMP               ,
+status           BIGINT          NOT NULL,
+
+CONSTRAINT PK_SQ_ORDER PRIMARY KEY (ID)
+);
+
+ALTER TABLE SQ_ORDER
+    ADD CONSTRAINT FK_ORDER_MERCHANTID FOREIGN KEY (merchantId) REFERENCES SQ_MERCHANT (id);
+
+ALTER TABLE SQ_ORDER
+    ADD CONSTRAINT FK_ORDER_SHOPPERID FOREIGN KEY (shopperId) REFERENCES SQ_SHOPPER (id);

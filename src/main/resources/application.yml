@@ -1,6 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:dev_seq}
-    username: ${DB_USER:seq}
-    password: ${DB_PASS:seq01}
-    driverClassName: org.postgresql.Driver

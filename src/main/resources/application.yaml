@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    initialization-mode: always
+    platform: postgres
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:dev_seq}
+    username: ${DB_USER:seq}
+    password: ${DB_PASS:seq01}
+    driverClassName: org.postgresql.Driver
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+
+server: 8081
