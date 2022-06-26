@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS SQ_DISBURSEMENT(
 
 id               BIGINT          NOT NULL,
 merchantId       BIGINT          NOT NULL,
+amount           DECIMAL         NOT NULL,
 year             BIGINT          NOT NULL,
 week             BIGINT          NOT NULL,
 
