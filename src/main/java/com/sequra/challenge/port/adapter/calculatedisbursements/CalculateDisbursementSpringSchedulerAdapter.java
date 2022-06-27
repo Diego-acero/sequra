@@ -22,7 +22,7 @@ public class CalculateDisbursementSpringSchedulerAdapter implements CalculateDis
 
     @Override
     public void calculateDisbursements() {
-
+        calculateDisbursementsUseCase.calculateDisbursements();
     }
 
 
