@@ -12,3 +12,6 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
 
 server: 8081
+
+disbursement:
+  cron: ${SEQURA_DISBURSEMENT_CRON:"0 0 * * MON"}
