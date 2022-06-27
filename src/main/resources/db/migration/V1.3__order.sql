@@ -4,8 +4,8 @@ id               BIGINT          NOT NULL,
 merchantId       BIGINT          NOT NULL,
 shopperId        BIGINT          NOT NULL,
 amount           DECIMAL         NOT NULL,
-createdAt        VARCHAR(255)    NOT NULL,
-completedAt      VARCHAR(255)            ,
+createdAt        TIMESTAMP       NOT NULL,
+completedAt      TIMESTAMP               ,
 status           BIGINT          NOT NULL,
 
 CONSTRAINT PK_SQ_ORDER PRIMARY KEY (ID)

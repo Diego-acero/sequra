@@ -31,9 +31,9 @@ public class Order {
     private BigDecimal amount;
 
     @Column(nullable = false)
-    private String createdAt;
+    private ZonedDateTime createdAt;
 
-    private String completedAt;
+    private ZonedDateTime completedAt;
 
     @Column(nullable = false)
     @Enumerated

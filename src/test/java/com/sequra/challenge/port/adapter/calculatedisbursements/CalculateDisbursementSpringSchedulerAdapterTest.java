@@ -22,7 +22,9 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
 import java.util.LinkedList;
 import java.util.List;
@@ -143,6 +145,26 @@ class CalculateDisbursementSpringSchedulerAdapterTest {
                 .forEach(disbursement -> validateDisbursement(disbursement, merchant, finalExpectedAmount));
     }
 
+    @Test
+    public void calculateDisbursementWithDifferentDaysOrders() {
+        order.setCompletedAt(ZonedDateTime.now().minus(2, ChronoUnit.WEEKS));
+        order = orderRepository.save(order);
+        Order correctOrder = buildOrder(merchant, ORDER_AMOUNTS[TWO]);
+        Order correctOrder2 = buildOrder(merchant, ORDER_AMOUNTS[ONE]);
+        correctOrder2.setCompletedAt(correctOrder2.getCompletedAt().minusDays(4));
+        orderRepository.save(correctOrder);
+        orderRepository.save(correctOrder2);
+        BigDecimal expectedAmount = DISBURSEMENTS_AMOUNTS[TWO].add(DISBURSEMENTS_AMOUNTS[ONE]);
+
+        calculateDisbursementSpringSchedulerAdapter.calculateDisbursements();
+
+        List<Disbursement> disbursements = disbursementsRepository.findAll();
+        Assertions.assertEquals(disbursements.size(), ONE);
+        disbursements.stream()
+                .filter(disbursementItem -> disbursementItem.getId().equals(merchant.getId()))
+                .forEach(disbursement -> validateDisbursement(disbursement, merchant, expectedAmount));
+    }
+
     @AfterEach
     public void afterEach() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -167,8 +189,8 @@ class CalculateDisbursementSpringSchedulerAdapterTest {
         order.setMerchant(merchant);
         order.setAmount(amount);
         order.setShopper(shopper);
-        order.setCompletedAt(ZonedDateTime.now().toString());
-        order.setCreatedAt(ZonedDateTime.now().toString());
+        order.setCompletedAt(ZonedDateTime.now().toLocalDate().atStartOfDay(ZoneId.systemDefault()));
+        order.setCreatedAt(ZonedDateTime.now());
         order.setStatus(OrderStatus.COMPLETED);
         return order;
     }
