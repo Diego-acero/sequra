@@ -4,6 +4,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 
 @NoArgsConstructor
 @Data
@@ -24,4 +28,14 @@ public class Disbursement {
 
     @Column(nullable = false)
     private Integer week;
+
+    @Column(nullable = false)
+    private BigDecimal amount;
+
+    public void calculateYearAndWeek() {
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        LocalDate date = LocalDate.now();
+        this.year = date.get(weekFields.weekBasedYear());
+        this.week = date.get(weekFields.weekOfWeekBasedYear());
+    }
 }

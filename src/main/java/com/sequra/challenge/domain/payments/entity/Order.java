@@ -36,4 +36,16 @@ public class Order {
     @Column(nullable = false)
     @Enumerated
     private OrderStatus status;
+
+    public BigDecimal calculateDisbursement() {
+        BigDecimal oneHundred = BigDecimal.valueOf(100L);
+
+        if(this.amount.longValue() < 50L) {
+            return this.amount.multiply(BigDecimal.ONE).divide(oneHundred);
+        } else if (this.amount.longValue() < 300L) {
+            return this.amount.multiply(BigDecimal.valueOf(0.95)).divide(oneHundred);
+        } else {
+            return this.amount.multiply(BigDecimal.valueOf(0.85)).divide(oneHundred);
+        }
+    }
 }
