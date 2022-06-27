@@ -12,6 +12,8 @@ import javax.persistence.*;
 @Entity
 public class Merchant {
     @Id
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "SEQ_SQ_MERCHANT")
+    @SequenceGenerator(name = "SEQ_SQ_MERCHANT", sequenceName = "SEQ_SQ_MERCHANT_ID", allocationSize = 1)
     private Long id;
 
     @Embedded

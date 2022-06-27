@@ -33,7 +33,7 @@ public class PaymentsDomainServiceImpl implements PaymentsDomainService {
         List<Merchant> merchants = merchantRepository.findAll();
         List<Disbursement> disbursements = new LinkedList<>();
         merchants.forEach(merchant -> {
-            Long totalOrders = orderRepository.countByMerchantId(merchant.getId());
+            Long totalOrders = orderRepository.countByMerchantIdAndStatus(merchant.getId(), OrderStatus.COMPLETED);
             PageFilter pageFilter = new PageFilter(20L, totalOrders);
             BigDecimal disbursementAmount = BigDecimal.ZERO;
 
@@ -47,14 +47,21 @@ public class PaymentsDomainServiceImpl implements PaymentsDomainService {
                 pageFilter.nextPage();
             }
 
-            Disbursement disbursement = new Disbursement();
-            disbursement.setAmount(disbursementAmount);
-            disbursement.setMerchant(merchant);
-            disbursement.calculateYearAndWeek();
+            if (!disbursementAmount.equals(BigDecimal.ZERO)) {
+                Disbursement disbursement = buildDisbursement(merchant, disbursementAmount);
+                disbursements.add(disbursement);
+            }
 
-            disbursements.add(disbursement);
         });
 
         return disbursements;
+    }
+
+    private Disbursement buildDisbursement(Merchant merchant, BigDecimal disbursementAmount) {
+        Disbursement disbursement = new Disbursement();
+        disbursement.setAmount(disbursementAmount);
+        disbursement.setMerchant(merchant);
+        disbursement.calculateYearAndWeek();
+        return disbursement;
     }
 }

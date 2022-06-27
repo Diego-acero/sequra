@@ -10,5 +10,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     Page<Order> findByMerchantIdAndStatus(Long merchantId, OrderStatus status, Pageable pageable);
 
-    Long countByMerchantId(Long merchantId);
+    Long countByMerchantIdAndStatus(Long merchantId, OrderStatus status);
 }

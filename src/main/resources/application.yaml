@@ -8,8 +8,12 @@ spring:
     driverClassName: org.postgresql.Driver
   jpa:
     database: POSTGRESQL
-    show-sql: true
+    show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    hibernate:
+      naming:
+       physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
 
 server: 8081
 

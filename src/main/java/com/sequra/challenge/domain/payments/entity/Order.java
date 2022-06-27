@@ -15,6 +15,8 @@ import java.time.ZonedDateTime;
 public class Order {
 
     @Id
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "SEQ_SQ_ORDER")
+    @SequenceGenerator(name = "SEQ_SQ_ORDER", sequenceName = "SEQ_SQ_ORDER_ID", allocationSize = 1)
     private Long id;
 
     @ManyToOne(optional = false)
@@ -29,9 +31,9 @@ public class Order {
     private BigDecimal amount;
 
     @Column(nullable = false)
-    private ZonedDateTime createdAt;
+    private String createdAt;
 
-    private ZonedDateTime completedAt;
+    private String completedAt;
 
     @Column(nullable = false)
     @Enumerated

@@ -16,7 +16,8 @@ import java.util.Locale;
 public class Disbursement {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "SEQ_SQ_DISBURSEMENT")
+    @SequenceGenerator(name = "SEQ_SQ_DISBURSEMENT", sequenceName = "SEQ_SQ_DISBURSEMENT_ID", allocationSize = 1)
     private Long id;
 
     @ManyToOne(optional = false)
