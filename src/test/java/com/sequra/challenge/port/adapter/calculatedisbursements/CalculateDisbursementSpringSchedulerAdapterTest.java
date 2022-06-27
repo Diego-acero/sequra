@@ -58,7 +58,7 @@ class CalculateDisbursementSpringSchedulerAdapterTest {
 
     private Merchant merchant;
     private Shopper shopper;
-    private List<Order> orders = new LinkedList<>();
+    private Order order;
 
     private int year;
     private int week;
@@ -75,10 +75,8 @@ class CalculateDisbursementSpringSchedulerAdapterTest {
         merchant = buildMerchant();
         merchant = merchantRepository.save(merchant);
 
-        Order order = buildOrder(merchant, ORDER_AMOUNTS[ZERO]);
+        order = buildOrder(merchant, ORDER_AMOUNTS[ZERO]);
         order = orderRepository.save(order);
-
-        orders.add(order);
     }
 
     @Test
@@ -92,7 +90,6 @@ class CalculateDisbursementSpringSchedulerAdapterTest {
 
     @Test
     public void calculateDisbursementNoCompletedOrders() {
-        Order order = orders.get(ZERO);
         order.setStatus(OrderStatus.PENDING);
         orderRepository.save(order);
 
@@ -126,9 +123,28 @@ class CalculateDisbursementSpringSchedulerAdapterTest {
                 .forEach(disbursement -> validateDisbursement(disbursement, merchant, DISBURSEMENTS_AMOUNTS[ZERO]));
     }
 
+    @Test
+    public void calculateDisbursementWithMultiplePages() {
+        BigDecimal expectedAmount = BigDecimal.ZERO;
+        List<Order> orders = new LinkedList<>();
+        for(int i = 0; i < 42; i++) {
+            orders.add(buildOrder(merchant, ORDER_AMOUNTS[ONE]));
+            expectedAmount = expectedAmount.add(DISBURSEMENTS_AMOUNTS[ONE]);
+        }
+        orderRepository.saveAll(orders);
+
+        calculateDisbursementSpringSchedulerAdapter.calculateDisbursements();
+
+        List<Disbursement> disbursements = disbursementsRepository.findAll();
+        Assertions.assertEquals(disbursements.size(), ONE);
+        BigDecimal finalExpectedAmount = expectedAmount;
+        disbursements.stream()
+                .filter(disbursementItem -> disbursementItem.getId().equals(merchant.getId()))
+                .forEach(disbursement -> validateDisbursement(disbursement, merchant, finalExpectedAmount));
+    }
+
     @AfterEach
     public void afterEach() {
-        orders.clear();
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         JdbcTestUtils.deleteFromTables(jdbcTemplate, TABLES_TO_DELETE);
     }
